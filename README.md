@@ -80,21 +80,19 @@ The `ProductService` contains several methods with business logic:
 ## Sample Test Cases
 
 ```java
-@Test
 void shouldFilterProductsWithinBudgetActiveAndInStock() {
-    // Arrange - setup mock behavior
+    // given
     when(productRepository.findInStock())
-        .thenReturn(Arrays.asList(laptop, mouse, keyboard, inactiveProduct));
+            .thenReturn(Arrays.asList(laptop, mouse, keyboard, inactiveProduct));
 
-    // Act - call the method under test
-    List<Product> result = productService
-        .getAvailableProductsWithinBudget(new BigDecimal("200.00"));
+    // when
+    List<Product> result = productService.getAvailableProductsWithinBudget(new BigDecimal("200.00"));
 
-    // Assert - verify results
+    // then
     assertEquals(2, result.size());
-    assertFalse(result.stream()
-        .anyMatch(p -> p.getName().equals("Old Product")));
-}
+    assertEquals(keyboard.getName(), result.get(0).getName());
+    assertEquals(mouse.getName(), result.get(1).getName());
+    assertFalse(result.stream().anyMatch(p -> p.getName().equals(inactiveProduct.getName())));
 ```
 
 ## Database Configuration
